@@ -17,11 +17,16 @@ const app = express();
 
 await connectCloudinary();
 // allow multiple origins
-const allowedOrigins = ["http://localhost:5173","https://grocery-app-frontend-dxs3.vercel.app"];
+const allowedOrigins = [
+  "http://localhost:5173", // local frontend
+  "https://grocery-app-frontend-dxs3-3f4zqn62k.vercel.app" // deployed frontend
+];
 //middlewares
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
+
+
 
 // Api endpoints
 app.use("/images", express.static("uploads"));
