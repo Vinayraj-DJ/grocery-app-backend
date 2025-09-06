@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+// import path from "path";
+// import { fileURLToPath } from "url";
 import { connectDB } from "./config/connectDB.js";
 dotenv.config();
 import userRoutes from "./routes/user.routes.js";
@@ -42,3 +44,5 @@ app.listen(PORT, () => {
   connectDB();
   console.log(`Server is running on port ${PORT}`);
 });
+
+
