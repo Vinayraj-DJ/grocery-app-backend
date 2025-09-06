@@ -4,8 +4,8 @@ import Product from "../models/product.model.js";
 export const addProduct = async (req, res) => {
   try {
     const { name, price, offerPrice, description, category } = req.body;
-    // const image = req.files?.map((file) => `/uploads/${file.filename}`);
-    const image = req.files?.map((file) => file.filename);
+    const image = req.files?.map((file) => `/uploads/${file.filename}`);
+
     if (
       !name ||
       !price ||

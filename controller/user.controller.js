@@ -23,11 +23,11 @@ export const registerUser = async (req, res) => {
     const user = new User({
       name,
       email,
-      password: hashedPassword,
+      password:hashedPassword,
     });
     await user.save();
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "15d",
     });
 
     res.cookie("token", token, {
@@ -60,23 +60,23 @@ export const loginUser = async (req, res) => {
     if (!email || !password) {
       return res
         .status(400)
-        .json({ message: "Please fill all the fields", success: false });
+        .json({ message: "All fields are required", success: false });
     }
     const user = await User.findOne({ email });
     if (!user) {
       return res
         .status(400)
-        .json({ message: "User does not exist", success: false });
+        .json({ message: "Invalid email or password", success: false });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res
         .status(400)
-        .json({ message: "Invalid credentials", success: false });
+        .json({ message: "Invalid email or password", success: false });
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "15d",
     });
     res.cookie("token", token, {
       httpOnly: true,
@@ -85,7 +85,7 @@ export const loginUser = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
-      message: "Logged in successfull",
+      message: "Logged in successfully",
       success: true,
       user: {
         name: user.name,
@@ -99,16 +99,17 @@ export const loginUser = async (req, res) => {
 };
 
 // check auth : /api/user/is-auth
-export const checkAuth = async (req, res) => {
+export const isAuthUser = async (req, res) => {
   try {
     const userId = req.user;
 
-    const user = await User.findById(userId).select("-password");
-    if (!user) {
+    
+    if (!userId) {
       return res
-        .status(404)
-        .json({ message: "User not found", success: false });
+        .status(401)
+        .json({ message: "Unauthorized", success: false });
     }
+    const user = await User.findById(userId).select("-password");
     res.status(200).json({
       success: true,
       user,
@@ -118,8 +119,10 @@ export const checkAuth = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
 // logout user: /api/user/logout
-export const logout = async (req, res) => {
+export const logoutUser = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,

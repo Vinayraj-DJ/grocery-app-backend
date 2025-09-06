@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-// import path from "path";
-// import { fileURLToPath } from "url";
 import { connectDB } from "./config/connectDB.js";
 dotenv.config();
+const app = express();
+
 import userRoutes from "./routes/user.routes.js";
 import sellerRoutes from "./routes/seller.routes.js";
 import productRoutes from "./routes/product.routes.js";
@@ -15,22 +15,28 @@ import orderRoutes from "./routes/order.routes.js";
 
 import { connectCloudinary } from "./config/cloudinary.js";
 
-const app = express();
 
-await connectCloudinary();
+
+// await connectCloudinary();
 // allow multiple origins
 const allowedOrigins = [
   "http://localhost:5173", // local frontend
   "https://grocery-app-frontend-dxs3-3f4zqn62k.vercel.app" // deployed frontend
 ];
 //middlewares
+app.use(express.json());
+connectDB();
+connectCloudinary()
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(cookieParser());
-app.use(express.json());
+
 
 
 
 // Api endpoints
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
 app.use("/images", express.static("uploads"));
 app.use("/api/user", userRoutes);
 app.use("/api/seller", sellerRoutes);
@@ -41,7 +47,7 @@ app.use("/api/order", orderRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  connectDB();
+  
   console.log(`Server is running on port ${PORT}`);
 });
 
