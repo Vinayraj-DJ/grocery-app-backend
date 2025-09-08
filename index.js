@@ -91,8 +91,8 @@ connectDB();
 // allow multiple origins
 const allowedOrigins = [
   "http://localhost:5173", // local frontend
-  // "https://grocery-app-frontend-dxs3-3f4zqn62k.vercel.app", // vercel frontend
-  "https://grocery-app-frontend-sigma.vercel.app", // deployed frontend
+ 
+  "https://grocery-app-frontend-sa6g-hre1qg7hy.vercel.app", // deployed frontend
 ];
 
 // middlewares
