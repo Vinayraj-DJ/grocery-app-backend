@@ -32,6 +32,18 @@ export const sellerLogin = async (req, res) => {
   }
 };
 
+// check seller auth  : /api/seller/is-auth
+export const isAuthSeller = async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error in isAuthSeller:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 // logout seller: /api/seller/logout
 export const sellerLogout = async (req, res) => {
   try {
@@ -52,14 +64,3 @@ export const sellerLogout = async (req, res) => {
 
 
 
-// check seller auth  : /api/seller/is-auth
-export const isAuthSeller = async (req, res) => {
-  try {
-    res.status(200).json({
-      success: true,
-    });
-  } catch (error) {
-    console.error("Error in isAuthSeller:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
