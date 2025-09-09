@@ -159,7 +159,7 @@ connectDB();
 // ✅ Allowed origins (no trailing slashes)
 const allowedOrigins = [
   "http://localhost:5173", // local frontend
-  "https://grocery-app-frontend-8x87.vercel.app", // deployed frontend
+  "https://grocery-app-frontend-sa6g.vercel.app/", // deployed frontend
 ];
 
 // Middlewares
