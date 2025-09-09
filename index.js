@@ -92,7 +92,7 @@ connectDB();
 const allowedOrigins = [
   "http://localhost:5173", // local frontend
  
-  "https://grocery-app-frontend-sa6g-hre1qg7hy.vercel.app", // deployed frontend
+  "https://grocery-app-frontend-8x87.vercel.app", // deployed frontend
 ];
 
 // middlewares
