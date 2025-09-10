@@ -13,42 +13,41 @@
 // export default router;
 
 
+// import express from "express";
+// import { authSeller } from "../middlewares/authSeller.js";
+// import { isAuthSeller, sellerLogin, sellerLogout } from "../controller/seller.controller.js";
+
+// const router = express.Router();
+
+// router.get("/", (req, res) => {
+//   res.json({ message: "Seller route works!" });
+// });
+
+// router.post("/login", sellerLogin);
+// router.get("/is-auth", authSeller, isAuthSeller);
+// router.post("/logout", authSeller, sellerLogout);
+
+// export default router;
+
+
 import express from "express";
 import { authSeller } from "../middlewares/authSeller.js";
-import {
-  isAuthSeller,
-  sellerLogin,
-  sellerLogout,
-} from "../controller/seller.controller.js";
+import { isAuthSeller, sellerLogin, sellerLogout } from "../controller/seller.controller.js";
 
 const router = express.Router();
 
-/**
- * Test route - GET /
- * This will respond if you just visit /api/seller in the browser
- */
+// Test route
 router.get("/", (req, res) => {
   res.json({ message: "Seller route works!" });
 });
 
-/**
- * POST /login
- * Route for seller login
- */
+// Seller login
 router.post("/login", sellerLogin);
 
-/**
- * GET /is-auth
- * Route to check if seller is authenticated
- * Requires authSeller middleware
- */
+// Auth check (protected)
 router.get("/is-auth", authSeller, isAuthSeller);
 
-/**
- * GET /logout
- * Route for seller logout
- * Requires authSeller middleware
- */
-router.get("/logout", authSeller, sellerLogout);
+// Logout (unprotected ✅)
+router.post("/logout", sellerLogout);
 
 export default router;

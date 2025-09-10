@@ -64,35 +64,96 @@
 
 
 
+// import jwt from "jsonwebtoken";
+
+// // seller login :/api/seller/login
+// export const sellerLogin = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     if (
+//       password === process.env.SELLER_PASSWORD &&
+//       email === process.env.SELLER_EMAIL
+//     ) {
+//       const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+//         expiresIn: "15d", // Token valid for 15 days
+//       });
+
+//       res.cookie("sellerToken", token, {
+//         httpOnly: true,
+//         secure: process.env.NODE_ENV === "production", // true only in prod
+//         sameSite: "None", // ✅ must be None for cross-site cookies
+//         maxAge: 15 * 24 * 60 * 60 * 1000, // match 15 days
+//       });
+
+//       return res
+//         .status(200)
+//         .json({ message: "Login successful", success: true });
+//     } else {
+//       return res
+//         .status(400)
+//         .json({ message: "Invalid credentials", success: false });
+//     }
+//   } catch (error) {
+//     console.error("Error in sellerLogin:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+// // check seller auth  : /api/seller/is-auth
+// export const isAuthSeller = async (req, res) => {
+//   try {
+//     res.status(200).json({
+//       success: true,
+//     });
+//   } catch (error) {
+//     console.error("Error in isAuthSeller:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+// // logout seller: /api/seller/logout
+// export const sellerLogout = async (req, res) => {
+//   try {
+//     res.clearCookie("sellerToken", {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       sameSite: "None", // ✅ must match login cookie
+//     });
+
+//     return res.status(200).json({
+//       message: "Logged out successfully",
+//       success: true,
+//     });
+//   } catch (error) {
+//     console.error("Error in sellerLogout:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+
 import jwt from "jsonwebtoken";
 
-// seller login :/api/seller/login
+// Seller Login
 export const sellerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (
-      password === process.env.SELLER_PASSWORD &&
-      email === process.env.SELLER_EMAIL
-    ) {
+    if (email === process.env.SELLER_EMAIL && password === process.env.SELLER_PASSWORD) {
       const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-        expiresIn: "15d", // Token valid for 15 days
+        expiresIn: "15d",
       });
 
       res.cookie("sellerToken", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // true only in prod
-        sameSite: "None", // ✅ must be None for cross-site cookies
-        maxAge: 15 * 24 * 60 * 60 * 1000, // match 15 days
+        secure: process.env.NODE_ENV === "production", // true when deployed
+        sameSite: "None", // important for cross-domain (Vercel + Render)
+        maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
       });
 
-      return res
-        .status(200)
-        .json({ message: "Login successful", success: true });
+      return res.status(200).json({ message: "Login successful", success: true });
     } else {
-      return res
-        .status(400)
-        .json({ message: "Invalid credentials", success: false });
+      return res.status(400).json({ message: "Invalid credentials", success: false });
     }
   } catch (error) {
     console.error("Error in sellerLogin:", error);
@@ -100,31 +161,26 @@ export const sellerLogin = async (req, res) => {
   }
 };
 
-// check seller auth  : /api/seller/is-auth
+// Seller Auth Check
 export const isAuthSeller = async (req, res) => {
   try {
-    res.status(200).json({
-      success: true,
-    });
+    res.status(200).json({ success: true, seller: req.seller });
   } catch (error) {
     console.error("Error in isAuthSeller:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-// logout seller: /api/seller/logout
+// Seller Logout
 export const sellerLogout = async (req, res) => {
   try {
     res.clearCookie("sellerToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "None", // ✅ must match login cookie
+      sameSite: "None",
     });
 
-    return res.status(200).json({
-      message: "Logged out successfully",
-      success: true,
-    });
+    return res.status(200).json({ message: "Logged out successfully", success: true });
   } catch (error) {
     console.error("Error in sellerLogout:", error);
     res.status(500).json({ message: "Internal server error" });
